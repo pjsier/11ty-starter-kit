@@ -2,6 +2,9 @@ name: CICD
 
 on: [push, pull_request, workflow_dispatch]
 
+env:
+  SITE_HOST: "https://example.com"
+
 jobs:
   checks:
     runs-on: ubuntu-latest
