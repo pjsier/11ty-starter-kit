@@ -1,0 +1,23 @@
+{
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": false,
+  "markdownlint.config": {
+    "MD025": false,
+    "MD033": false,
+    "MD041": false
+  },
+  "[html]": {
+    "editor.formatOnSave": false
+  },
+  "[markdown]": {
+    "editor.formatOnSave": true
+  },
+  "[nunjucks]": {
+    "editor.tabSize": 2
+  },
+  "css.validate": false,
+  "javascript.format.enable": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}
