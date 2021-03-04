@@ -4,7 +4,7 @@ const fs = require("fs")
 const path = require("path")
 const sitemap = require("@quasibit/eleventy-plugin-sitemap")
 const Image = require("@11ty/eleventy-img")
-const { url } = require("./site/_data/site")
+const { baseurl, url } = require("./site/_data/site")
 
 async function resizeImage(src, sizes, outputFormat = "png") {
   const stats = await Image(src, {
@@ -15,6 +15,22 @@ async function resizeImage(src, sizes, outputFormat = "png") {
 
   const props = stats[outputFormat].slice(-1)[0]
   return props.url
+}
+
+async function imageShortcode(src, alt, sizes, cls = "") {
+  let metadata = await Image(src, {
+    widths: [500, 768],
+    formats: ["webp", "jpeg"],
+    outputDir: "./site/img",
+    urlPath: `${baseurl}/img/`,
+  })
+  return Image.generateHTML(metadata, {
+    alt,
+    sizes,
+    class: cls,
+    loading: "lazy",
+    decoding: "async",
+  })
 }
 
 module.exports = function (eleventyConfig) {
@@ -33,12 +49,16 @@ module.exports = function (eleventyConfig) {
   })
   eleventyConfig.setLibrary("md", markdownLib)
   eleventyConfig.addFilter("markdown", (value) => markdownLib.render(value))
+  eleventyConfig.addPairedShortcode("mdBlock", (content) =>
+    markdownLib.render(content)
+  )
 
   // This allows Eleventy to watch for file changes during local development.
   eleventyConfig.setUseGitIgnore(false)
 
   eleventyConfig.addNunjucksAsyncShortcode("resizeImage", resizeImage)
   eleventyConfig.addFilter("resizeImage", resizeImage)
+  eleventyConfig.addNunjucksAsyncShortcode("image", imageShortcode)
 
   // Used to avoid nunjucks escaping includes of imported CSS
   // cssnano was converting media queries with ID values to "{#"
@@ -57,7 +77,6 @@ module.exports = function (eleventyConfig) {
   )
 
   eleventyConfig.addPassthroughCopy({
-    "src/img": "img",
     "site/img": "img",
   })
 

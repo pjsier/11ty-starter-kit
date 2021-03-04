@@ -1,9 +1,9 @@
 const production = process.env.NODE_ENV === "production"
 
-const host = production ? "https://example.com" : "http://0.0.0.0:8080"
+const host = production ? process.env.SITE_HOST : "http://0.0.0.0:8080"
 
 // For modifying the <base> tag
-const baseurl = ""
+const baseurl = production ? "" : ""
 
 module.exports = {
   name: "11ty Starter Kit",

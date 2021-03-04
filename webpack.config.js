@@ -3,7 +3,7 @@ const TerserPlugin = require("terser-webpack-plugin")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 
 const config = {
-  target: "web",
+  target: ["web", "es5"],
   devtool: "source-map",
   mode: "production",
   entry: {
@@ -21,9 +21,7 @@ const config = {
     process.env.NODE_ENV === "production"
       ? {
           minimize: true,
-          minimizer: [
-            new TerserPlugin({ cache: true, parallel: true, sourceMap: true }),
-          ],
+          minimizer: [new TerserPlugin({ parallel: true })],
         }
       : {},
   module: {
@@ -39,7 +37,6 @@ const config = {
                 [
                   "@babel/preset-env",
                   {
-                    debug: true,
                     targets:
                       process.env.NODE_ENV === "production"
                         ? [">1%", "ie 11", "not op_mini all"]
@@ -68,20 +65,16 @@ const config = {
       },
     ],
   },
-  node: {
-    fs: "empty",
-    net: "empty",
-    tls: "empty",
-  },
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve("./site/_includes/webpack.html"),
       filename: path.resolve("./site/_includes/webpack.njk"),
+      scriptLoading: "blocking",
       inject: false,
     }),
   ],
   resolve: {
-    extensions: [".js"],
+    extensions: [".js", ".mjs", ".json"],
   },
   watchOptions: {
     poll: true,
