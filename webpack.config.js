@@ -27,7 +27,7 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.m?js$/,
         exclude: /node_modules\//,
         use: [
           {
@@ -37,10 +37,7 @@ const config = {
                 [
                   "@babel/preset-env",
                   {
-                    targets:
-                      process.env.NODE_ENV === "production"
-                        ? [">1%", "ie 11", "not op_mini all"]
-                        : ["Last 2 Firefox versions"],
+                    targets: [">1%", "ie 11", "not op_mini all"],
                     useBuiltIns: "usage",
                     corejs: 3,
                     modules: false,
