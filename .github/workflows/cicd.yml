@@ -48,7 +48,10 @@ jobs:
 
       - run: npm ci --prefer-offline --no-audit --no-optional
 
-      - run: npm run build
+      # Run twice to make sure images are loaded
+      - run: |
+          npm run build
+          npm run build
 
       - run: npm run deploy
 
